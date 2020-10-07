@@ -8,11 +8,11 @@ if (isset($_POST['adminLogin'])) {
     $pass = $_POST['pass'];
     $select = "SELECT * FROM  `admin` WHERE name = '$name'  and password = '$pass' ";  // query 
     $select =  mysqli_query($conn, $select); // run qury 
-   
+
     $q = mysqli_num_rows($select);
 
     if ($q > 0) {
-       $_SESSION['admin'] = $name;
+        $_SESSION['admin'] = $name;
         header('location:/start/hrSytem/employees/listdata.php');
     } else {
         echo "not admin";
@@ -23,12 +23,16 @@ if (isset($_POST['adminLogin'])) {
 if (isset($_POST['HRlogin'])) {
     $name = $_POST['name'];
     $id = $_POST['id'];
-    $select = "SELECT * FROM  `employees` WHERE name = '$name' and id = '$id' ";  // query 
+    // $select = "SELECT * FROM  `employees`";  // query 
+    // query "
+    $select = "SELECT * , department.name as Dname  FROM  department JOIN employees ON 
+      department.id = employees.depart WHERE employees.id = $id and employees.name = '$name' ";
+      
     $select =  mysqli_query($conn, $select); // run qury 
     $row = mysqli_fetch_assoc($select);
     $q = mysqli_num_rows($select);
     if ($q > 0) {
-        if ($row['depart'] == 1) {
+        if ($row['Dname'] == 'HR') {
             $_SESSION['HR'] = $name;
             header('location:/start/hrSytem/employees/listdata.php');
         }
@@ -42,7 +46,7 @@ if (isset($_POST['HRlogin'])) {
 <html lang="en">
 
 <body>
-  
+
     <div class="container col-md-6 text-center mt-5">
         <nav style="margin:auto ;width:50%">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
